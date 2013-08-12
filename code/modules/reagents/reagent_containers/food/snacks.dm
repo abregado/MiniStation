@@ -122,9 +122,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/storage))
 		..() // -> item/attackby()
-		return 0
+	if(istype(W,/obj/item/weapon/storage))
+		..() // -> item/attackby()
 	if((slices_num <= 0 || !slices_num) || !slice_path)
-		return 0
+		return 1
 	var/inaccurate = 0
 	if( \
 			istype(W, /obj/item/weapon/kitchenknife) || \
@@ -142,7 +143,7 @@
 		inaccurate = 1
 	else if(W.w_class <= 2 && istype(src,/obj/item/weapon/reagent_containers/food/snacks/sliceable))
 		if(!iscarbon(user))
-			return 0
+			return 1
 		user << "<span class='notice'>You slip [W] inside [src].</span>"
 		user.u_equip(W)
 		if ((user.client && user.s_active != src))
@@ -150,10 +151,9 @@
 		W.dropped(user)
 		add_fingerprint(user)
 		contents += W
-		return 1 // no afterattack here
+		return
 	else
-		return 0 // --- this is everything that is NOT a slicing implement, and which is not being slipped into food; allow afterattack ---
-
+		return 1
 	if ( \
 			!isturf(src.loc) || \
 			!(locate(/obj/structure/table) in src.loc) && \
@@ -162,7 +162,6 @@
 		)
 		user << "<span class='notice'>You cannot slice [src] here! You need a table or at least a tray.</span>"
 		return 1
-
 	var/slices_lost = 0
 	if (!inaccurate)
 		user.visible_message( \
@@ -179,7 +178,7 @@
 	for(var/i=1 to (slices_num-slices_lost))
 		var/obj/slice = new slice_path (src.loc)
 		reagents.trans_to(slice,reagents_per_slice)
-	del(src) // so long and thanks for all the fish
+	del(src)
 
 
 /obj/item/weapon/reagent_containers/food/snacks/Del()

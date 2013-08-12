@@ -1,4 +1,4 @@
-Captain=1
+Captain=0
 Head of Personnel=1
 Head of Security=1
 Chief Engineer=1

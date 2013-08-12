@@ -233,7 +233,7 @@
 			help_shake_act(M)
 
 		if ("grab")
-			if (M == src || anchored)
+			if (M == src)
 				return
 			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src )
 
@@ -326,8 +326,6 @@
 /mob/living/carbon/alien/larva/show_inv(mob/user)
 	return
 
-/mob/living/carbon/alien/larva/toggle_throw_mode()
-	return
 
 /* Commented out because it's duplicated in life.dm
 /mob/living/carbon/alien/larva/proc/grow() // Larvae can grow into full fledged Xenos if they survive long enough -- TLE

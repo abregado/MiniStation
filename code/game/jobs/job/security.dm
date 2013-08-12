@@ -148,8 +148,8 @@
 	flag = OFFICER
 	department_flag = ENGSEC
 	faction = "Station"
-	total_positions = 2
-	spawn_positions = 2
+	total_positions = 1
+	spawn_positions = 1
 	selection_color = "#ffeeee"
 	minimal_access = list(access_security, access_sec_doors, access_brig, access_court)
 	minimal_player_age = 7

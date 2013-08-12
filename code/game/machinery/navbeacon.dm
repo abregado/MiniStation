@@ -181,61 +181,63 @@ Transponder Codes:<UL>"}
 		return
 
 	Topic(href, href_list)
-		if(..())
+		..()
+		if (usr.stat)
 			return
-		if(open && !locked)
-			usr.set_machine(src)
+		if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
+			if(open && !locked)
+				usr.set_machine(src)
 
-			if (href_list["freq"])
-				freq = sanitize_frequency(freq + text2num(href_list["freq"]))
-				updateDialog()
-
-			else if(href_list["locedit"])
-				var/newloc = copytext(sanitize(input("Enter New Location", "Navigation Beacon", location) as text|null),1,MAX_MESSAGE_LEN)
-				if(newloc)
-					location = newloc
+				if (href_list["freq"])
+					freq = sanitize_frequency(freq + text2num(href_list["freq"]))
 					updateDialog()
 
-			else if(href_list["edit"])
-				var/codekey = href_list["code"]
+				else if(href_list["locedit"])
+					var/newloc = copytext(sanitize(input("Enter New Location", "Navigation Beacon", location) as text|null),1,MAX_MESSAGE_LEN)
+					if(newloc)
+						location = newloc
+						updateDialog()
 
-				var/newkey = input("Enter Transponder Code Key", "Navigation Beacon", codekey) as text|null
-				if(!newkey)
-					return
+				else if(href_list["edit"])
+					var/codekey = href_list["code"]
 
-				var/codeval = codes[codekey]
-				var/newval = input("Enter Transponder Code Value", "Navigation Beacon", codeval) as text|null
-				if(!newval)
-					newval = codekey
-					return
+					var/newkey = input("Enter Transponder Code Key", "Navigation Beacon", codekey) as text|null
+					if(!newkey)
+						return
 
-				codes.Remove(codekey)
-				codes[newkey] = newval
+					var/codeval = codes[codekey]
+					var/newval = input("Enter Transponder Code Value", "Navigation Beacon", codeval) as text|null
+					if(!newval)
+						newval = codekey
+						return
 
-				updateDialog()
+					codes.Remove(codekey)
+					codes[newkey] = newval
 
-			else if(href_list["delete"])
-				var/codekey = href_list["code"]
-				codes.Remove(codekey)
-				updateDialog()
+					updateDialog()
 
-			else if(href_list["add"])
+				else if(href_list["delete"])
+					var/codekey = href_list["code"]
+					codes.Remove(codekey)
+					updateDialog()
 
-				var/newkey = input("Enter New Transponder Code Key", "Navigation Beacon") as text|null
-				if(!newkey)
-					return
+				else if(href_list["add"])
 
-				var/newval = input("Enter New Transponder Code Value", "Navigation Beacon") as text|null
-				if(!newval)
-					newval = "1"
-					return
+					var/newkey = input("Enter New Transponder Code Key", "Navigation Beacon") as text|null
+					if(!newkey)
+						return
 
-				if(!codes)
-					codes = new()
+					var/newval = input("Enter New Transponder Code Value", "Navigation Beacon") as text|null
+					if(!newval)
+						newval = "1"
+						return
 
-				codes[newkey] = newval
+					if(!codes)
+						codes = new()
 
-				updateDialog()
+					codes[newkey] = newval
+
+					updateDialog()
 
 
 

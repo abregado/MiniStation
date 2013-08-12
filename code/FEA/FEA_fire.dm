@@ -143,9 +143,6 @@
 
 /obj/effect/hotspot/proc/Kill()
 	DestroyTurf()
-	garbage_collect()
-
-/obj/effect/hotspot/proc/garbage_collect()
 	if(istype(loc, /turf/simulated))
 		var/turf/simulated/T = loc
 		if(T.active_hotspot == src)

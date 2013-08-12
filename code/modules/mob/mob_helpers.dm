@@ -115,11 +115,6 @@ proc/isobserver(A)
 		return 1
 	return 0
 
-proc/isovermind(A)
-	if(istype(A, /mob/camera/blob))
-		return 1
-	return 0
-
 proc/isorgan(A)
 	if(istype(A, /datum/limb))
 		return 1
@@ -151,23 +146,21 @@ proc/isorgan(A)
 	return zone
 
 
-/proc/ran_zone(zone, probability = 80)
-
+/proc/ran_zone(zone, probability)
 	zone = check_zone(zone)
+	if(!probability)	probability = 90
+	if(probability == 100)	return zone
 
-	if(prob(probability))
-		return zone
+	if(zone == "chest")
+		if(prob(probability))	return "chest"
+		var/t = rand(1, 9)
+		switch(t)
+			if(1 to 3)	return "head"
+			if(4 to 6)	return "l_arm"
+			if(7 to 9)	return "r_arm"
 
-	var/t = rand(1, 17) // randomly pick a different zone, or maybe the same one
-	switch(t)
-		if(1)		 return "head"
-		if(2)		 return "chest"
-		if(3 to 6)	 return "l_arm"
-		if(7 to 10)	 return "r_arm"
-		if(10 to 13) return "l_leg"
-		if(14 to 17) return "r_leg"
-
-	return zone
+	if(prob(probability * 0.75))	return zone
+	return "chest"
 
 
 /proc/stars(n, pr)

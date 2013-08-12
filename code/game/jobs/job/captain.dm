@@ -1,9 +1,9 @@
-/datum/job/captain
+/*/datum/job/captain
 	title = "Captain"
 	flag = CAPTAIN
 	department_flag = ENGSEC
 	faction = "Station"
-	total_positions = 1
+	total_positions = 0
 	spawn_positions = 1
 	supervisors = "Nanotrasen officials and Space law"
 	selection_color = "#ccccff"
@@ -38,9 +38,11 @@
 		world << "<b>[H.real_name] is the captain!</b>"
 		return 1
 
-	get_access()
+
+get_access()
 		return get_all_accesses()
 
+*/
 
 
 /datum/job/lieutenant

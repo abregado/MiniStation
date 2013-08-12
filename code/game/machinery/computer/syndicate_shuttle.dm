@@ -70,12 +70,11 @@
 
 
 /obj/machinery/computer/syndicate_station/Topic(href, href_list)
-	if(..())
-		return
-
+	if(!isliving(usr))	return
 	var/mob/living/user = usr
 
-	user.set_machine(src)
+	if(in_range(src, user) || istype(user, /mob/living/silicon))
+		user.set_machine(src)
 
 	if(href_list["syndicate"])
 		syndicate_move_to(/area/syndicate_station/start)
@@ -96,6 +95,7 @@
 	else if(href_list["mining"])
 		syndicate_move_to(/area/syndicate_station/mining)
 
+	add_fingerprint(usr)
 	updateUsrDialog()
 	return
 

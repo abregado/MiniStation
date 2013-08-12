@@ -7,6 +7,7 @@
 	density = 0
 	opacity = 0
 	anchored = 1
+	var/active = 1
 	var/health = 30
 	var/brute_resist = 4
 	var/fire_resist = 1
@@ -80,7 +81,7 @@
 
 	proc/expand(var/turf/T = null, var/prob = 1)
 		if(prob && !prob(health))	return
-		if(istype(T, /turf/space) && prob(75)) 	return
+		if(istype(T, /turf/space)) 	return
 		if(!T)
 			var/list/dirs = list(1,2,4,8)
 			for(var/i = 1 to 4)
@@ -106,8 +107,16 @@
 
 
 	ex_act(severity)
-		var/damage = 150
-		health -= ((damage/brute_resist) - (severity * 5))
+		var/damage = 50
+		switch(severity)
+			if(1)
+				src.health -= rand(100,120)
+			if(2)
+				src.health -= rand(60,100)
+			if(3)
+				src.health -= rand(20,60)
+
+		health -= (damage/brute_resist)
 		update_icon()
 		return
 
@@ -153,7 +162,6 @@
 /obj/effect/blob/normal
 	icon_state = "blob"
 	luminosity = 0
-	health = 21
 
 	Delete()
 		src.loc = null

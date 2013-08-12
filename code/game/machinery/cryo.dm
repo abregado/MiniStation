@@ -128,18 +128,19 @@
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/Topic(href, href_list)
-	if(..())
-		return
-	if(href_list["start"])
-		on = !on
-		update_icon()
-	if(href_list["eject"])
-		if(beaker)
-			var/obj/item/weapon/reagent_containers/glass/B = beaker
-			B.loc = get_step(loc, SOUTH)
-			beaker = null
+	if((get_dist(src, usr) <= 1) || istype(usr, /mob/living/silicon/ai))
+		if(href_list["start"])
+			on = !on
+			update_icon()
+		if(href_list["eject"])
+			if(beaker)
+				var/obj/item/weapon/reagent_containers/glass/B = beaker
+				B.loc = get_step(loc, SOUTH)
+				beaker = null
 
-	updateUsrDialog()
+		updateUsrDialog()
+		add_fingerprint(usr)
+
 
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/reagent_containers/glass))

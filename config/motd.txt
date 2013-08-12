@@ -1,5 +1,8 @@
 <!-- Most valid html will work in here, excluding images. -->
 
 <h1>Welcome to Space Station 13!</h1>
-
-<i>This server is running ministation, a /tg/station 13 mod build.</i>
+<i>This server is running a custom version of ministation, a /tg/station 13 build for low population servers.</i>
+<p>Visit the <a href="http://wiki.nanotrasen.com/index.php/Main_Page">Nanotrasen Wiki</a> for any infomation about how to play</p>
+<p>For some guidelines of what to do please check out <a href="https://docs.google.com/document/d/1aQtU3t-AoXrSk8GWw4tnEj0b6FQSNmnpNcUFC38GIZU/edit?usp=sharing">Bens Guide</a> to having fun in ss13</p>
+<p>A notso-up to date ministation map is also available <a href="http://meta.filesmelt.com/downloader.php?file=Map59.png">here</a></p>
+<i>BE SURE TO SET YOURSELF AVAILABLE FOR pAI ANTAGANIST ROLES TO GET MORE RESPAWN OPPORTUNITIES</i>

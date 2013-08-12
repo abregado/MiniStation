@@ -147,7 +147,7 @@
 	assignment = "Syndicate Overlord"
 	access = list(access_syndicate)
 
-/obj/item/weapon/card/id/captains_spare
+/*/obj/item/weapon/card/id/captains_spare
 	name = "captain's spare ID"
 	desc = "The spare ID of the High Lord himself."
 	icon_state = "gold"
@@ -158,7 +158,7 @@
 		var/datum/job/captain/J = new/datum/job/captain
 		access = J.get_access()
 		..()
-
+*/
 /obj/item/weapon/card/id/centcom
 	name = "\improper Centcom ID"
 	desc = "An ID straight from Cent. Com."

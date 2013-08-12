@@ -1,7 +1,8 @@
 /mob/living/Login()
 	..()
 	//Mind updates
-	sync_mind()
+	mind_initialize()	//updates the mind (or creates and initializes one if one doesn't exist)
+	mind.active = 1		//indicates that the mind is currently synced with a client
 	mind.show_memory(src, 0)
 
 	//Round specific stuff like hud updates

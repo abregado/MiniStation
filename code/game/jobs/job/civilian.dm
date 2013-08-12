@@ -123,8 +123,8 @@
 	flag = CARGOTECH
 	department_flag = CIVILIAN
 	faction = "Station"
-	total_positions = 2
-	spawn_positions = 2
+	total_positions = 1
+	spawn_positions = 1
 	supervisors = "the captain and lieutenant"
 	selection_color = "#dddddd"
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
@@ -176,14 +176,14 @@
 		return 1
 
 */
-
+/*
 //Griff
 /datum/job/clown
 	title = "Clown"
 	flag = CLOWN
 	department_flag = CIVILIAN
 	faction = "Station"
-	total_positions = 1
+	total_positions = 0
 	spawn_positions = 1
 	supervisors = "the Lieutenant"
 	selection_color = "#dddddd"
@@ -207,7 +207,7 @@
 		H.equip_to_slot_or_del(new /obj/item/toy/waterflower(H), slot_in_backpack)
 		H.mutations.Add(CLUMSY)
 		return 1
-
+*/
 /*
 
 /datum/job/mime

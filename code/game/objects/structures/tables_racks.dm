@@ -284,9 +284,6 @@
 /obj/structure/table/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src, user) < 2)
 		var/obj/item/weapon/grab/G = W
-		if(G.affecting.buckled)
-			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
-			return
 		if(G.state < GRAB_AGGRESSIVE)
 			user << "<span class='notice'>You need a better grip to do that!</span>"
 			return
@@ -325,7 +322,8 @@
 		return
 
 	user.drop_item(src)
-	return 1
+	//if(W && W.loc)	W.loc = src.loc // Unnecessary -  see: mob/proc/drop_item(atom)    - Doohl
+	return
 
 
 /*
@@ -341,9 +339,6 @@
 
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
-		if(G.affecting.buckled)
-			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
-			return
 		if(G.state < GRAB_AGGRESSIVE)
 			user << "<span class='notice'>You need a better grip to do that!</span>"
 			return
@@ -362,7 +357,6 @@
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		del(src)
 		return
-
 	if(isrobot(user))
 		return
 	if(istype(W, /obj/item/weapon/melee/energy/blade))
@@ -379,7 +373,7 @@
 
 	user.drop_item(src)
 	//if(W && W.loc)	W.loc = src.loc
-	return 1
+	return
 
 
 /*
@@ -396,9 +390,6 @@
 
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
-		if(G.affecting.buckled)
-			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
-			return
 		if(G.state < GRAB_AGGRESSIVE)
 			user << "<span class='notice'>You need a better grip to do that!</span>"
 			return
@@ -460,7 +451,7 @@
 
 	user.drop_item(src)
 	//if(W && W.loc)	W.loc = src.loc
-	return 1
+	return
 
 
 /*
@@ -523,12 +514,11 @@
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		del(src)
 		return
-
 	if(isrobot(user))
 		return
 	user.drop_item()
 	if(W && W.loc)	W.loc = src.loc
-	return 1
+	return
 
 /obj/structure/rack/meteorhit(obj/O as obj)
 	del(src)

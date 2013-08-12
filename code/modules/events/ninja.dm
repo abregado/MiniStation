@@ -102,7 +102,6 @@
 					if(2)	//steal
 						var/datum/objective/steal/O = new /datum/objective/steal()
 						O.set_target(pick(O.possible_items_special))
-						O.owner = Mind
 						Mind.objectives += O
 
 					if(3)	//protect/kill

@@ -111,11 +111,10 @@
 				usr << "Added a freeform law."
 
 			if(istype(P, /obj/item/device/mmi))
-				var/obj/item/device/mmi/M = P
-				if(!M.brainmob)
+				if(!P:brainmob)
 					user << "\red Sticking an empty MMI into the frame would sort of defeat the purpose."
 					return
-				if(M.brainmob.stat == 2)
+				if(P:brainmob.stat == 2)
 					user << "\red Sticking a dead brain into the frame would sort of defeat the purpose."
 					return
 
@@ -123,20 +122,17 @@
 					user << "\red This MMI does not seem to fit."
 					return
 
-				if(jobban_isbanned(M.brainmob, "AI"))
+				if(jobban_isbanned(P:brainmob, "AI"))
 					user << "\red This MMI does not seem to fit."
 					return
 
-				if(!M.brainmob.mind)
-					user << "\red This MMI is mindless."
-					return
-
-				ticker.mode.remove_cultist(M.brainmob.mind, 1)
-				ticker.mode.remove_revolutionary(M.brainmob.mind, 1)
+				if(P:brainmob.mind)
+					ticker.mode.remove_cultist(P:brainmob.mind, 1)
+					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)
 
 				user.drop_item()
-				M.loc = src
-				brain = M
+				P.loc = src
+				brain = P
 				usr << "Added a brain."
 				icon_state = "3b"
 

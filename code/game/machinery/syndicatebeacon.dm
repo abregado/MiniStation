@@ -39,8 +39,6 @@
 		onclose(user, "syndbeacon")
 
 	Topic(href, href_list)
-		if(..())
-			return
 		if(href_list["betraitor"])
 			if(charges < 1)
 				src.updateUsrDialog()
@@ -92,6 +90,7 @@
 					M << "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]"
 					obj_count++
 
+		src.add_fingerprint(usr)
 		src.updateUsrDialog()
 		return
 

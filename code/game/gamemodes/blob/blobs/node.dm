@@ -3,6 +3,7 @@
 	icon = 'icons/mob/blob.dmi'
 	icon_state = "blob_node"
 	health = 100
+	brute_resist = 1
 	fire_resist = 2
 
 
@@ -23,7 +24,6 @@
 	Life()
 		for(var/i = 1; i < 8; i += i)
 			Pulse(5, i)
-		health = min(initial(health), health + 1)
 
 	update_icon()
 		if(health <= 0)

@@ -43,10 +43,10 @@ ANIMAL_DELAY 0
 
 ### NAMES ###
 ## If uncommented this adds a random surname to a player's name if they only specify one name.
-#HUMANS_NEED_SURNAMES
+HUMANS_NEED_SURNAMES
 
 ## If uncommented, this forces all players to use random names !and appearances!.
-#FORCE_RANDOM_NAMES
+FORCE_RANDOM_NAMES
 
 
 ### ALERT LEVELS ###
@@ -65,7 +65,12 @@ ALERT_DELTA The station's self-destruct mechanism has been engaged. All crew are
 ## than the boring old circular explosions. They require more CPU and are (as of March 2013) experimental.
 ## The default map is generally designed for the old style explosions in terms of security.
 
-#USE_RECURSIVE_EXPLOSIONS
+USE_RECURSIVE_EXPLOSIONS
+
+### COMMUNICATION ###
+
+## Comment this to disallow people to use their headsets for non-department frequencies
+GENERAL_CHANNEL_HEADSET
 
 ### GAME MODES ###
 
@@ -73,17 +78,17 @@ ALERT_DELTA The station's self-destruct mechanism has been engaged. All crew are
 ## Default probablity is 1, increase to make that mode more likely to be picked.
 ## Set to 0 to disable that mode.
 
-PROBABILITY TRAITOR 3
-PROBABILITY TRAITORCHAN 2
-PROBABILITY DOUBLE_AGENTS 1
-PROBABILITY NUCLEAR 1
-PROBABILITY REVOLUTION 1
+PROBABILITY TRAITOR 0
+PROBABILITY TRAITORCHAN 0
+PROBABILITY DOUBLE_AGENTS 0
+PROBABILITY NUCLEAR 0
+PROBABILITY REVOLUTION 0
 PROBABILITY CULT 0
-PROBABILITY CHANGELING 2
+PROBABILITY CHANGELING 0
 PROBABILITY WIZARD 0
 PROBABILITY MALFUNCTION 0
-PROBABILITY BLOB 1
-PROBABILITY EXTENDED 1
+PROBABILITY BLOB 0
+PROBABILITY EXTENDED 3
 
 ## You probably want to keep sandbox off by default for secret and random.
 PROBABILITY SANDBOX 0
@@ -99,7 +104,7 @@ PROBABILITY SANDBOX 0
 ## Variables calculate how number of antagonists will scale to population.
 ## Used as (Antagonists = Population / Coeff)
 ## Set to 0 to disable scaling and use default numbers instead.
-TRAITOR_SCALING_COEFF 6
+TRAITOR_SCALING_COEFF 10
 CHANGELING_SCALING_COEFF 10
 
 ## Uncomment to prohibit jobs that start with loyalty

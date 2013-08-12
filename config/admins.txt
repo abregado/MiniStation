@@ -5,6 +5,7 @@
 # Ranks can be anything defined in admin_ranks.txt           ~Carn   #
 ######################################################################
 
+Abregado - Game Master
 quarxink - Game Master
 tle - Game Master
 xsi - Game Master

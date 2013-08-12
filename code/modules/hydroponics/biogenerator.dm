@@ -220,8 +220,9 @@
 	return 1
 
 /obj/machinery/biogenerator/Topic(href, href_list)
-	if(..())
-		return
+	if(stat & BROKEN) return
+	if(usr.stat || usr.restrained()) return
+	if(!in_range(src, usr)) return
 
 	usr.set_machine(src)
 

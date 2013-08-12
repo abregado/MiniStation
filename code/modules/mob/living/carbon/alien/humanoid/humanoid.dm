@@ -261,7 +261,7 @@
 			help_shake_act(M)
 
 		if ("grab")
-			if (M == src || anchored)
+			if (M == src)
 				return
 			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src)
 

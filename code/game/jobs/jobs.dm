@@ -50,7 +50,6 @@ var/list/assistant_occupations = list(
 
 
 var/list/command_positions = list(
-	"Captain",
 	"Lieutenant"
 )
 

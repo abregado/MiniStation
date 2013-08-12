@@ -145,11 +145,10 @@
 					return
 				if(2)
 					objholder = input(usr,"Enter typepath:" ,"Typepath","/obj/structure/closet")
-					var/P = text2path(objholder)
 					var/list/removed_paths = list("/obj/effect/bhole")
-					if((objholder in removed_paths) || !ispath(P))
-						objholder = "/obj/structure/closet"
+					if(objholder in removed_paths)
 						alert("That path is not allowed.")
+						objholder = "/obj/structure/closet"
 					else if (dd_hasprefix(objholder, "/mob") && !check_rights(R_DEBUG,0))
 						objholder = "/obj/structure/closet"
 				if(3)
@@ -255,8 +254,6 @@
 
 		if(4)
 			if(pa.Find("left"))
-				if(isturf(object))
-					return
 				holder.throw_atom = object
 			if(pa.Find("right"))
 				if(holder.throw_atom)

@@ -73,7 +73,11 @@
 	return
 
 /obj/machinery/particle_accelerator/control_box/Topic(href, href_list)
-	if(..())
+	..()
+	//Ignore input if we are broken, !silicon guy cant touch us, or nonai controlling from super far away
+	if(stat & (BROKEN|NOPOWER) || (get_dist(src, usr) > 1 && !istype(usr, /mob/living/silicon)) || (get_dist(src, usr) > 8 && !istype(usr, /mob/living/silicon/ai)))
+		usr.unset_machine()
+		usr << browse(null, "window=pacontrol")
 		return
 
 	if(!interface_control)

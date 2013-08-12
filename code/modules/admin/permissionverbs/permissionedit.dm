@@ -50,7 +50,8 @@
 	if(!usr.client)
 		return
 
-	if (!check_rights(R_PERMISSIONS))
+	if(!usr.client.holder || !(usr.client.holder.rights & R_PERMISSIONS))
+		usr << "\red You do not have permission to do this!"
 		return
 
 	establish_db_connection()
@@ -99,7 +100,8 @@
 	if(!usr.client)
 		return
 
-	if (check_rights(R_PERMISSIONS))
+	if(!usr.client.holder || !(usr.client.holder.rights & R_PERMISSIONS))
+		usr << "\red You do not have permission to do this!"
 		return
 
 	establish_db_connection()

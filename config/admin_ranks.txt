@@ -29,6 +29,7 @@
 
 Admin Observer
 Moderator		+ADMIN
+Owner			+SERVER
 Admin Candidate	+@
 Trial Admin		+@ +SPAWN +REJUV +VAREDIT +BAN
 Badmin			+@ +POSSESS +BUILDMODE +SERVER +FUN

@@ -405,7 +405,7 @@
 			return "Code Gold"
 
 /proc/get_all_jobs()
-	return list("Unemployed", "Captain", "Lieutenant", "Bartender", "Cargo Miner", "Janitor",
+	return list("Unemployed", "Lieutenant", "Bartender", "Cargo Miner", "Janitor",
 				"Station Engineer", "Medical Doctor", "Chemist", "Scientist", "Detective", "Security Officer")
 
 proc/get_all_job_icons() //For all existing HUD icons

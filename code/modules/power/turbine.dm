@@ -185,21 +185,39 @@
 	return
 
 /obj/machinery/power/turbine/Topic(href, href_list)
-	if(..())
+	..()
+	if(stat & BROKEN)
 		return
+	if (usr.stat || usr.restrained() )
+		return
+	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
+		if(!istype(usr, /mob/living/silicon/ai))
+			usr << "\red You don't have the dexterity to do this!"
+			return
 
-	if( href_list["close"] )
+	if (( usr.machine==src && ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+
+
+		if( href_list["close"] )
+			usr << browse(null, "window=turbine")
+			usr.machine = null
+			return
+
+		else if( href_list["str"] )
+			compressor.starter = !compressor.starter
+
+		spawn(0)
+			for(var/mob/M in viewers(1, src))
+				if ((M.client && M.machine == src))
+					src.interact(M)
+
+	else
 		usr << browse(null, "window=turbine")
 		usr.machine = null
-		return
 
-	else if( href_list["str"] )
-		compressor.starter = !compressor.starter
+	return
 
-	spawn(0)
-		for(var/mob/M in viewers(1, src))
-			if ((M.client && M.machine == src))
-				src.interact(M)
+
 
 
 

@@ -3,6 +3,7 @@
 	icon = 'icons/mob/blob.dmi'
 	icon_state = "blob_factory"
 	health = 100
+	brute_resist = 1
 	fire_resist = 2
 	var/list/spores = list()
 	var/max_spores = 3
@@ -33,8 +34,8 @@
 	icon_state = "blobpod"
 	icon_living = "blobpod"
 	pass_flags = PASSBLOB
-	health = 40
-	maxHealth = 40
+	health = 15
+	maxHealth = 15
 	melee_damage_lower = 2
 	melee_damage_upper = 4
 	attacktext = "hits"
@@ -56,14 +57,6 @@
 		..()
 		adjustBruteLoss(Clamp(0.01 * exposed_temperature, 1, 5))
 
-	blob_act()
-		return
-
-	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-		if(istype(mover, /obj/effect/blob))
-			return 1
-		return ..()
-
 	New(loc, var/obj/effect/blob/factory/linked_node)
 		if(istype(linked_node))
 			factory = linked_node
@@ -73,4 +66,4 @@
 	Die()
 		if(factory)
 			factory.spores -= src
-		del(src)
+		..()
