@@ -7,10 +7,10 @@
 	name = "traitor"
 	config_tag = "traitor"
 	restricted_jobs = list("Cyborg")//They are part of the AI if he is traitor so are they, they use to get double chances
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")//AI", Currently out of the list as malf does not work for shit
+	protected_jobs = list("Lieutenant")//AI", Currently out of the list as malf does not work for shit
 	required_players = 0
 	required_enemies = 1
-	recommended_enemies = 4
+	recommended_enemies = 1
 
 
 	uplink_welcome = "Syndicate Uplink Console:"
@@ -19,7 +19,7 @@
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
-	var/traitors_possible = 4 //hard limit on traitors if scaling is turned off
+	var/traitors_possible = 1 //hard limit on traitors if scaling is turned off
 
 
 /datum/game_mode/traitor/announce()
