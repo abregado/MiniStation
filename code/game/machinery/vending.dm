@@ -40,6 +40,10 @@
 	var/shut_up = 0				//Stop spouting those godawful pitches!
 	var/extended_inventory = 0	//can we access the hidden inventory?
 	var/panel_open = 0			//Hacking that vending machine. Gonna get a free candy bar.
+	var/jammed = 0				//Is there a product jammed in there
+	var/max_dump = 3			//maximum dumpable
+	var/cur_dump = 0			//current dump
+	var/faults = 15				//higher is less reliable
 	var/scan_id = 1
 	var/obj/item/weapon/coin/coin
 	var/datum/wires/vending/wires = null
@@ -106,6 +110,7 @@
 
 
 /obj/machinery/vending/attackby(obj/item/weapon/W, mob/user)
+	
 	if(istype(W, /obj/item/weapon/card/emag))
 		emagged = 1
 		user << "You short out the product lock on [src]"
@@ -128,10 +133,35 @@
 		coin = W
 		user << "<span class='notice'>You insert [W] into [src].</span>"
 		return
+	else if(jammed)
+		if(istype(W, /obj/item/weapon/crowbar)&&panel_open)
+			jammed = 0
+			vend_ready = 1
+			faults = faults + 10
+			icon_state = initial(icon_state)
+			user << "You unjam the vending machine with the crowbar."
+			return
+		else
+			if(prob(faults*2))
+				malfunction()
+				user << "You force the vending machine to unjam."
+			..()
+			faults = faults + 1
 	else
 		..()
+		if(prob(5))
+			malfunction()
+			usr << "Your strike cracks the machines case"
+		else if (prob(25))
+			jammed=1
+			icon_state = "[initial(icon_state)]-off"
+			usr << "Your strike causes the machine to jam"
+			vend_ready = 0
+		else
+			faults = faults + 1
+		
 
-
+		
 /obj/machinery/vending/attack_paw(mob/user)
 	return attack_hand(user)
 
@@ -142,6 +172,8 @@
 
 /obj/machinery/vending/attack_hand(mob/user)
 	if(stat & (BROKEN|NOPOWER))
+		return
+	if(jammed)
 		return
 	user.set_machine(src)
 
@@ -167,6 +199,7 @@
 		if(extended_inventory)
 			display_records = product_records + hidden_records
 		if(coin)
+			display_records = product_records + coin_records
 			display_records = product_records + coin_records
 		if(coin && extended_inventory)
 			display_records = product_records + hidden_records + coin_records
@@ -204,6 +237,8 @@
 
 /obj/machinery/vending/Topic(href, href_list)
 	if(stat & (BROKEN|NOPOWER))
+		return
+	if(jammed)
 		return
 	if(usr.stat || usr.restrained())
 		return
@@ -273,6 +308,12 @@
 			spawn(vend_delay)
 				new R.product_path(get_turf(src))
 				vend_ready = 1
+				faults = faults +1
+				if(prob(faults))
+					jammed=1
+					icon_state = "[initial(icon_state)]-off"
+					usr << "The vending machine jams"
+					vend_ready = 0
 				return
 
 			updateUsrDialog()
@@ -284,8 +325,8 @@
 		add_fingerprint(usr)
 		updateUsrDialog()
 	else
-		usr << browse(null, "window=vending")
-
+		if (!jammed)
+			usr << browse(null, "window=vending")
 
 /obj/machinery/vending/process()
 	if(stat & (BROKEN|NOPOWER))
@@ -304,6 +345,8 @@
 
 	if(shoot_inventory && prob(2))
 		throw_item()
+	
+	
 
 
 /obj/machinery/vending/proc/speak(message)
@@ -336,11 +379,15 @@
 		if(!dump_path)
 			continue
 
-		while(R.amount>0)
+		while(R.amount>0&&cur_dump<max_dump)
 			new dump_path(loc)
 			R.amount--
+			cur_dump++
+			
+			
 		break
 
+	jammed = 0
 	stat |= BROKEN
 	icon_state = "[initial(icon_state)]-broken"
 	return
@@ -432,6 +479,7 @@
 	product_slogans = "I hope nobody asks me for a bloody cup o' tea...;Alcohol is humanity's friend. Would you abandon a friend?;Quite delighted to serve you!;Is nobody thirsty on this station?"
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
 	req_access_txt = "25"
+	faults = 5
 
 /obj/machinery/vending/assist
 	products = list(	/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 3,/obj/item/device/assembly/signaler = 4,
@@ -448,7 +496,7 @@
 	vend_delay = 34
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,/obj/item/weapon/reagent_containers/food/drinks/tea = 25,/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/ice = 10)
-
+	faults = 10
 
 
 /obj/machinery/vending/snack
@@ -463,7 +511,6 @@
 	contraband = list(/obj/item/weapon/reagent_containers/food/snacks/syndicake = 6)
 
 
-
 /obj/machinery/vending/cola
 	name = "\improper Robust Softdrinks"
 	desc = "A softdrink vendor provided by Robust Industries, LLC."
@@ -474,6 +521,7 @@
 					/obj/item/weapon/reagent_containers/food/drinks/dr_gibb = 10,/obj/item/weapon/reagent_containers/food/drinks/starkist = 10,
 					/obj/item/weapon/reagent_containers/food/drinks/space_up = 10)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/thirteenloko = 5)
+	faults = 5
 
 //This one's from bay12
 /obj/machinery/vending/cart
@@ -485,6 +533,7 @@
 	products = list(/obj/item/weapon/cartridge/medical = 10,/obj/item/weapon/cartridge/engineering = 10,/obj/item/weapon/cartridge/security = 10,
 					/obj/item/weapon/cartridge/janitor = 10,/obj/item/weapon/cartridge/signal/toxins = 10,/obj/item/device/pda/heads = 10,
 					/obj/item/weapon/cartridge/captain = 3,/obj/item/weapon/cartridge/quartermaster = 10)
+	faults = 1
 
 
 /obj/machinery/vending/cigarette
@@ -510,6 +559,7 @@
 					/obj/item/weapon/reagent_containers/syringe/antiviral = 4,/obj/item/weapon/reagent_containers/syringe = 12,
 					/obj/item/device/healthanalyzer = 5,/obj/item/weapon/reagent_containers/glass/beaker = 4, /obj/item/weapon/reagent_containers/dropper = 2)
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,/obj/item/weapon/reagent_containers/pill/stox = 4,/obj/item/weapon/reagent_containers/pill/antitox = 6)
+	faults = 5
 
 
 //This one's from bay12
@@ -519,6 +569,7 @@
 	products = list(/obj/item/clothing/under/rank/scientist = 6,/obj/item/clothing/suit/bio_suit = 6,/obj/item/clothing/head/bio_hood = 6,
 					/obj/item/device/transfer_valve = 6,/obj/item/device/assembly/timer = 6,/obj/item/device/assembly/signaler = 6,
 					/obj/item/device/assembly/prox_sensor = 6,/obj/item/device/assembly/igniter = 6)
+	faults = 5
 
 /obj/machinery/vending/wallmed1
 	name = "\improper NanoMed"
@@ -530,6 +581,7 @@
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
 	products = list(/obj/item/stack/medical/bruise_pack = 2,/obj/item/stack/medical/ointment = 2,/obj/item/weapon/reagent_containers/syringe/inaprovaline = 4,/obj/item/device/healthanalyzer = 1)
 	contraband = list(/obj/item/weapon/reagent_containers/syringe/antitoxin = 4,/obj/item/weapon/reagent_containers/syringe/antiviral = 4,/obj/item/weapon/reagent_containers/pill/tox = 1)
+	faults = 5
 
 /obj/machinery/vending/wallmed2
 	name = "\improper NanoMed"
@@ -541,6 +593,7 @@
 	products = list(/obj/item/weapon/reagent_containers/syringe/inaprovaline = 5,/obj/item/weapon/reagent_containers/syringe/antitoxin = 3,/obj/item/stack/medical/bruise_pack = 3,
 					/obj/item/stack/medical/ointment =3,/obj/item/device/healthanalyzer = 3)
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3)
+	faults = 5
 
 /obj/machinery/vending/security
 	name = "\improper SecTech"
@@ -552,6 +605,7 @@
 	products = list(/obj/item/weapon/handcuffs = 8,/obj/item/weapon/grenade/flashbang = 4,/obj/item/device/flash = 5,
 					/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,/obj/item/weapon/storage/box/evidence = 6)
 	contraband = list(/obj/item/clothing/glasses/sunglasses = 2,/obj/item/weapon/storage/fancy/donut_box = 2)
+	faults = 15
 
 /obj/machinery/vending/hydronutrients
 	name = "\improper NutriMax"
@@ -563,6 +617,7 @@
 	products = list(/obj/item/nutrient/ez = 35,/obj/item/nutrient/l4z = 25,/obj/item/nutrient/rh = 15,/obj/item/weapon/pestspray = 20,
 					/obj/item/weapon/reagent_containers/syringe = 5,/obj/item/weapon/storage/bag/plants = 5, /obj/item/device/analyzer/plant_analyzer = 5, /obj/item/weapon/minihoe = 5)
 	contraband = list(/obj/item/weapon/reagent_containers/spray/plantbgone = 2, /obj/item/weapon/hatchet = 2, /obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5)
+	faults = 5
 
 /obj/machinery/vending/hydroseeds
 	name = "\improper MegaSeed Servitor"
@@ -579,7 +634,7 @@
 	contraband = list(/obj/item/seeds/amanitamycelium = 2,/obj/item/seeds/glowshroom = 2,/obj/item/seeds/libertymycelium = 2,/obj/item/seeds/nettleseed = 2,
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2)
 	premium = list(/obj/item/toy/waterflower = 1)
-
+	faults = 5
 
 /obj/machinery/vending/magivend
 	name = "\improper MagiVend"
@@ -591,6 +646,7 @@
 	product_ads = "FJKLFJSD;AJKFLBJAKL;1234 LOONIES LOL!;>MFW;Kill them fuckers!;GET DAT FUKKEN DISK;HONK!;EI NATH;Destroy the station!;Admin conspiracies since forever!;Space-time bending hardware!"
 	products = list(/obj/item/clothing/head/wizard = 1,/obj/item/clothing/suit/wizrobe = 1,/obj/item/clothing/head/wizard/red = 1,/obj/item/clothing/suit/wizrobe/red = 1,/obj/item/clothing/shoes/sandal = 1,/obj/item/weapon/staff = 2)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
+	faults = 0
 
 /obj/machinery/vending/dinnerware
 	name = "dinnerware"
@@ -618,6 +674,7 @@
 					/obj/item/weapon/wrench = 5,/obj/item/device/analyzer = 5,/obj/item/device/t_scanner = 5,/obj/item/weapon/screwdriver = 5)
 	contraband = list(/obj/item/weapon/weldingtool/hugetank = 2,/obj/item/clothing/gloves/fyellow = 2)
 	premium = list(/obj/item/clothing/gloves/yellow = 1)
+	faults = 5
 
 /obj/machinery/vending/engivend
 	name = "\improper Engi-Vend"
@@ -628,6 +685,7 @@
 	products = list(/obj/item/clothing/glasses/meson = 2,/obj/item/device/multitool = 4,/obj/item/weapon/airlock_electronics = 10,/obj/item/weapon/module/power_control = 10,/obj/item/weapon/airalarm_electronics = 10,/obj/item/weapon/cell/high = 10)
 	contraband = list(/obj/item/weapon/cell/potato = 3)
 	premium = list(/obj/item/weapon/storage/belt/utility = 3)
+	faults = 1
 
 //This one's from bay12
 /obj/machinery/vending/engineering
@@ -645,6 +703,7 @@
 	// There was an incorrect entry (cablecoil/power).  I improvised to cablecoil/heavyduty.
 	// Another invalid entry, /obj/item/weapon/circuitry.  I don't even know what that would translate to, removed it.
 	// The original products list wasn't finished.  The ones without given quantities became quantity 5.  -Sayu
+	faults = 1
 
 //This one's from bay12
 /obj/machinery/vending/robotics
@@ -658,4 +717,5 @@
 					/obj/item/weapon/scalpel = 2,/obj/item/weapon/circular_saw = 2,/obj/item/weapon/tank/anesthetic = 2,/obj/item/clothing/mask/breath/medical = 5,
 					/obj/item/weapon/screwdriver = 5,/obj/item/weapon/crowbar = 5)
 	//everything after the power cell had no amounts, I improvised.  -Sayu
+	faults = 1
 
